@@ -10,7 +10,6 @@ class App extends Component {
 
   componentDidMount(){
     this.getVenues()
-    this.renderMap()
   }
   renderMap = () =>{
     loadMapAPI("https://maps.googleapis.com/maps/api/js?key=AIzaSyCnPeVOPbLkPtwjEbH9MKDppTkoFSVmKdA&callback=initMap")
@@ -30,7 +29,7 @@ class App extends Component {
     .then(response => {
       this.setState({
         venues: response.data.response.groups[0].items
-      })
+      }, this.renderMap())
     })
     .catch(error =>{
       console.log("Error" + error)
@@ -38,11 +37,18 @@ class App extends Component {
   }
 
 initMap = () => {
-  let styles = [{"featureType": "all", "elementType": "all", "stylers": [{"hue": "#0000b0"},{"invert_lightness": "true"},{"saturation": -30}]}]
+  const styles = [{"featureType": "all", "elementType": "all", "stylers": [{"hue": "#0000b0"},{"invert_lightness": "true"},{"saturation": -30}]}]
   const map = new window.google.maps.Map(document.getElementById('map'), {
-    center: {lat: 33.42, lng: -111.83},
-    zoom: 15,
+    center: {lat: 33.415076, lng: -111.831389},
+    zoom: 16,
     styles: styles
+  })
+  this.state.venues.map(myVenue =>{
+    let marker = new window.google.maps.Marker({
+      position: {lat: myVenue.venue.location.lat, lng: myVenue.venue.location.lng},
+      map: map,
+      title: myVenue.venue.name
+    })
   })
 }
 
