@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://hcolleen.github.io/neighborhood-map/",
   "dependencies": {
+    "axios": "^0.18.0",
     "gh-pages": "^2.0.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
