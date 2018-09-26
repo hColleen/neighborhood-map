@@ -43,12 +43,25 @@ initMap = () => {
     zoom: 16,
     styles: styles
   })
+
+  let infoWindow = new window.google.maps.InfoWindow()
+
   this.state.venues.map(myVenue =>{
     let marker = new window.google.maps.Marker({
       position: {lat: myVenue.venue.location.lat, lng: myVenue.venue.location.lng},
       map: map,
       title: myVenue.venue.name
     })
+
+    let contentString = `${myVenue.venue.name}`
+
+
+    marker.addListener('click', function(){
+      infoWindow.setContent(contentString)
+
+      infoWindow.open(map, marker)
+    })
+
   })
 }
 
@@ -73,3 +86,5 @@ function loadMapAPI(url){
 }
 
 export default App;
+
+//tutorial from here: https://www.youtube.com/watch?v=ywdxLNjhBYw&list=PLgOB68PvvmWCGNn8UMTpcfQEiITzxEEA1
