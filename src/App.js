@@ -50,15 +50,16 @@ initMap = () => {
     let marker = new window.google.maps.Marker({
       position: {lat: myVenue.venue.location.lat, lng: myVenue.venue.location.lng},
       map: map,
-      title: myVenue.venue.name
+      title: myVenue.venue.nam
     })
 
-    let contentString = `${myVenue.venue.name}`
+    let contentString = `${myVenue.venue.name}<br />
+    ${myVenue.venue.location.address}`
 
 
     marker.addListener('click', function(){
       infoWindow.setContent(contentString)
-
+      console.log(myVenue.venue.categories)
       infoWindow.open(map, marker)
     })
 
