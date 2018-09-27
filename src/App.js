@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import axios from 'axios'
+import Menu from './Sidebar'
 
 class App extends Component {
 
@@ -50,8 +51,7 @@ initMap = () => {
   let infoWindow = new window.google.maps.InfoWindow()
 
   this.state.venues.map(myVenue =>{
-       venueIDs.push(myVenue.venue.id)
-        console.log(venueIDs)
+    venueIDs.push(myVenue.venue.id)
 
     let marker = new window.google.maps.Marker({
       position: {lat: myVenue.venue.location.lat, lng: myVenue.venue.location.lng},
