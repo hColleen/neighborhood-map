@@ -27,10 +27,11 @@ class App extends Component {
     }
     axios.get(endPoint + new URLSearchParams(parameters))
     .then(response => {
-      this.setState({
+        this.setState({
         venues: response.data.response.groups[0].items
-      }, this.renderMap())
-    })
+      })
+      this.renderMap()
+      })
     .catch(error =>{
       console.log("Error" + error)
     })
@@ -44,13 +45,18 @@ initMap = () => {
     styles: styles
   })
 
+  const venueIDs= []
+
   let infoWindow = new window.google.maps.InfoWindow()
 
   this.state.venues.map(myVenue =>{
+       venueIDs.push(myVenue.venue.id)
+        console.log(venueIDs)
+
     let marker = new window.google.maps.Marker({
       position: {lat: myVenue.venue.location.lat, lng: myVenue.venue.location.lng},
       map: map,
-      title: myVenue.venue.nam
+      title: myVenue.venue.name
     })
 
     let contentString = `${myVenue.venue.name}<br />
@@ -59,7 +65,6 @@ initMap = () => {
 
     marker.addListener('click', function(){
       infoWindow.setContent(contentString)
-      console.log(myVenue.venue.categories)
       infoWindow.open(map, marker)
     })
 
