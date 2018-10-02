@@ -1,17 +1,47 @@
 import React, { Component } from 'react';
 import './App.css';
 import axios from 'axios'
-import Menu from './Sidebar'
+import Sidebar from "react-sidebar";
+
+const mql = window.matchMedia(`(min-width: 800px)`);
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      sidebarDocked: mql.matches,
+      sidebarOpen: false
+    };
+ 
+    this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
+    this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
+  }
+ 
+  componentWillMount() {
+    mql.addListener(this.mediaQueryChanged);
+  }
+ 
+  componentWillUnmount() {
+    this.state.mql.removeListener(this.mediaQueryChanged);
+  }
+ 
+  onSetSidebarOpen(open) {
+    this.setState({ sidebarOpen: open });
+  }
+ 
+  mediaQueryChanged() {
+    this.setState({ sidebarDocked: mql.matches, sidebarOpen: false });
+  }
 
   state = {
-    venues: []
+    venues: [],
+    venueID: []
   }
 
   componentDidMount(){
     this.getVenues()
   }
+
   renderMap = () =>{
     loadMapAPI("https://maps.googleapis.com/maps/api/js?key=AIzaSyCnPeVOPbLkPtwjEbH9MKDppTkoFSVmKdA&callback=initMap")
     window.initMap = this.initMap
@@ -30,8 +60,25 @@ class App extends Component {
     .then(response => {
         this.setState({
         venues: response.data.response.groups[0].items
-      })
+        })
       this.renderMap()
+      })
+    .catch(error =>{
+      console.log("Error" + error)
+    })
+  }
+
+  getVenueInfo = () => {
+    const endPoint = "https://api.foursquare.com/v2/venues/?"
+    const parameters = {
+      client_id: "JKLNY4U2KT3FAS2L2AHI50NEEO0BHAY0A004ALOQEEBS5AIW",
+      client_secret: "A5ZD1JNOSWUQ0MKYLOV0B1F03YK1PW2CLWPDL45VYPPSQA2W",
+      venue_id: venueID,
+      v: "20182507"
+    }
+    axios.get(endPoint + new URLSearchParams(parameters))
+    .then(response => {
+        console.log(response)
       })
     .catch(error =>{
       console.log("Error" + error)
@@ -46,12 +93,11 @@ initMap = () => {
     styles: styles
   })
 
-  const venueIDs= []
-
   let infoWindow = new window.google.maps.InfoWindow()
 
   this.state.venues.map(myVenue =>{
-    venueIDs.push(myVenue.venue.id)
+
+  venueID = myVenue.id
 
     let marker = new window.google.maps.Marker({
       position: {lat: myVenue.venue.location.lat, lng: myVenue.venue.location.lng},
@@ -74,9 +120,16 @@ initMap = () => {
 
   render() {
     return (
-      <main>
-        <div id="map"></div>
-      </main>
+      <Sidebar
+        sidebar={<b>Sidebar content</b>}
+        open={this.state.sidebarOpen}
+        docked={this.state.sidebarDocked}
+        onSetOpen={this.onSetSidebarOpen}
+      >
+        <main>
+          <div id="map"></div>
+        </main>
+      </Sidebar>
     );
   }
 }
