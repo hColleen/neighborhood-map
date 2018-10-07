@@ -1,37 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
-import axios from 'axios'
-import Sidebar from "react-sidebar";
+import axios from 'axios';
+import BurgerMenu from './component/Menu';
 
-const mql = window.matchMedia(`(min-width: 800px)`);
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      sidebarDocked: mql.matches,
-      sidebarOpen: false
-    };
- 
-    this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
-    this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
-  }
- 
-  componentWillMount() {
-    mql.addListener(this.mediaQueryChanged);
-  }
- 
-  componentWillUnmount() {
-    this.state.mql.removeListener(this.mediaQueryChanged);
-  }
- 
-  onSetSidebarOpen(open) {
-    this.setState({ sidebarOpen: open });
-  }
- 
-  mediaQueryChanged() {
-    this.setState({ sidebarDocked: mql.matches, sidebarOpen: false });
-  }
 
   state = {
     venues: [],
@@ -68,23 +41,6 @@ class App extends Component {
     })
   }
 
-  getVenueInfo = () => {
-    const endPoint = "https://api.foursquare.com/v2/venues/?"
-    const parameters = {
-      client_id: "JKLNY4U2KT3FAS2L2AHI50NEEO0BHAY0A004ALOQEEBS5AIW",
-      client_secret: "A5ZD1JNOSWUQ0MKYLOV0B1F03YK1PW2CLWPDL45VYPPSQA2W",
-      venue_id: venueID,
-      v: "20182507"
-    }
-    axios.get(endPoint + new URLSearchParams(parameters))
-    .then(response => {
-        console.log(response)
-      })
-    .catch(error =>{
-      console.log("Error" + error)
-    })
-  }
-
 initMap = () => {
   const styles = [{"featureType": "all", "elementType": "all", "stylers": [{"hue": "#0000b0"},{"invert_lightness": "true"},{"saturation": -30}]}]
   const map = new window.google.maps.Map(document.getElementById('map'), {
@@ -96,8 +52,6 @@ initMap = () => {
   let infoWindow = new window.google.maps.InfoWindow()
 
   this.state.venues.map(myVenue =>{
-
-  venueID = myVenue.id
 
     let marker = new window.google.maps.Marker({
       position: {lat: myVenue.venue.location.lat, lng: myVenue.venue.location.lng},
@@ -120,17 +74,11 @@ initMap = () => {
 
   render() {
     return (
-      <Sidebar
-        sidebar={<b>Sidebar content</b>}
-        open={this.state.sidebarOpen}
-        docked={this.state.sidebarDocked}
-        onSetOpen={this.onSetSidebarOpen}
-      >
         <main>
-          <div id="map"></div>
+          <BurgerMenu />
+          <div id = "map" role = "application" aria-label = "map" tabIndex = "-1"></div>
         </main>
-      </Sidebar>
-    );
+    );  
   }
 }
 
