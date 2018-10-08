@@ -7,6 +7,7 @@ class BurgerMenu extends Component{
         return(
             <Menu>
             <div className = "sidebar">
+            <b>Find Your Fancy</b>
             <input type = {"search"} id = {"search"} placeholder = {"Filter"} />
             </div>
             </Menu>
