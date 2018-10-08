@@ -5,9 +5,11 @@ import './Menu.css'
 class BurgerMenu extends Component{
     render(){
         return(
+            <Menu>
             <div className = "sidebar">
-            Hello World
+            <input type = {"search"} id = {"search"} placeholder = {"Filter"} />
             </div>
+            </Menu>
         )
     }
 }

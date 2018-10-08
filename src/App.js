@@ -25,7 +25,7 @@ class App extends Component {
     const parameters = {
       client_id: "JKLNY4U2KT3FAS2L2AHI50NEEO0BHAY0A004ALOQEEBS5AIW",
       client_secret: "A5ZD1JNOSWUQ0MKYLOV0B1F03YK1PW2CLWPDL45VYPPSQA2W",
-      query: "coffee",
+      query: "food",
       ll: "33.42,-111.83",
       v: "20182507"
     }
@@ -46,7 +46,9 @@ initMap = () => {
   const map = new window.google.maps.Map(document.getElementById('map'), {
     center: {lat: 33.415076, lng: -111.831389},
     zoom: 16,
-    styles: styles
+    styles: styles,
+    mapTypeId: "roadmap",
+    disableDefaultUI: true
   })
 
   let infoWindow = new window.google.maps.InfoWindow()
