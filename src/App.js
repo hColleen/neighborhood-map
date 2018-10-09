@@ -1,98 +1,51 @@
 import React, { Component } from 'react';
 import './App.css';
-import axios from 'axios';
 import BurgerMenu from './component/Menu';
+import Map from './component/Map'
+import SquareAPI from './API/';
 
 
 class App extends Component {
 
-  state = {
-    venues: [],
-    venueID: []
+  
+  constructor(){
+    super();
+    this.state = {
+      venues: [],
+      markers: []
+    }
   }
 
   componentDidMount(){
-    this.getVenues()
-  }
-
-  renderMap = () =>{
-    loadMapAPI("https://maps.googleapis.com/maps/api/js?key=AIzaSyCnPeVOPbLkPtwjEbH9MKDppTkoFSVmKdA&callback=initMap")
-    window.initMap = this.initMap
-  }
-
-  getVenues = () => {
-    const endPoint = "https://api.foursquare.com/v2/venues/explore?"
-    const parameters = {
-      client_id: "JKLNY4U2KT3FAS2L2AHI50NEEO0BHAY0A004ALOQEEBS5AIW",
-      client_secret: "A5ZD1JNOSWUQ0MKYLOV0B1F03YK1PW2CLWPDL45VYPPSQA2W",
-      query: "food",
+    SquareAPI.search({
       ll: "33.42,-111.83",
-      v: "20182507"
-    }
-    axios.get(endPoint + new URLSearchParams(parameters))
-    .then(response => {
-        this.setState({
-        venues: response.data.response.groups[0].items
+      query: 'restaurant'
+    }).then(results =>{
+      const { venues } = results.response;
+      const { markers } = venues.map(venue => {
+        return{
+            lat: venue.location.lat,
+            lng: venue.location.lng,
+            title: venue.name,
+            isOpen: false,
+            isVisible: true
+            }
         })
-      this.renderMap()
+        this.setState({ venues, markers })
+        console.log(results)
+      }).catch(error => {
+        alert('FourSquare API Failed. Please check connection and try again')
       })
-    .catch(error =>{
-      console.log("Error" + error)
-    })
-  }
-
-initMap = () => {
-  const styles = [{"featureType": "all", "elementType": "all", "stylers": [{"hue": "#0000b0"},{"invert_lightness": "true"},{"saturation": -30}]}]
-  const map = new window.google.maps.Map(document.getElementById('map'), {
-    center: {lat: 33.415076, lng: -111.831389},
-    zoom: 16,
-    styles: styles,
-    mapTypeId: "roadmap",
-    disableDefaultUI: true
-  })
-
-  let infoWindow = new window.google.maps.InfoWindow()
-
-  this.state.venues.map(myVenue =>{
-
-    let marker = new window.google.maps.Marker({
-      position: {lat: myVenue.venue.location.lat, lng: myVenue.venue.location.lng},
-      map: map,
-      title: myVenue.venue.name,
-      animation: window.google.maps.Animation.DROP
-    })
-
-    let contentString = `${myVenue.venue.name}<br />
-    ${myVenue.venue.location.address}`
-
-
-    marker.addListener('click', function(){
-      infoWindow.setContent(contentString)
-      infoWindow.open(map, marker)
-    })
-
-  })
-}
-
+ }
 
   render() {
     return (
         <main>
-          <BurgerMenu />
-          <div id = "map" role = "application" aria-label = "map" tabIndex = "-1"></div>
+          <BurgerMenu {...this.state} />
+          <Map />
         </main>
     );  
   }
-}
-
-
-function loadMapAPI(url){
-  let index = window.document.getElementsByTagName('script')[0]
-  let script = window.document.createElement('script')
-  script.src = url
-  script.asynch = true
-  script.defer = true
-  index.parentNode.insertBefore(script, index)
 }
 
 export default App;
