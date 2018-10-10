@@ -6,28 +6,38 @@ const mapStyle = require('./mapStyle.json')
 const MyMapComponent = withScriptjs(
     withGoogleMap((props) =>
         <GoogleMap
-            defaultZoom={14}
+            defaultZoom={16}
             defaultCenter={{ lat: 33.42, lng: -111.83 }}
-            defaultOptions = {{ styles: mapStyle,
+            defaultOptions={{
+                styles: mapStyle,
                 streetViewControl: false,
                 scaleControl: false,
                 mapTypeControl: false,
                 panControl: false,
                 zoomControl: false,
                 rotateControl: false,
-                fullscreenControl: false }}
+                fullscreenControl: false
+            }}
             disableDefaultUI
         >
             {props.markers &&
                 props.markers
                     .filter(marker => marker.isVisible)
-                    .map((marker, idx) => (
-                        <Marker key={idx} position={{ lat: marker.lat, lng: marker.lng }} onClick ={()=> props.handleMarkerClick(marker)}>
-                            {marker.isOpen && (<InfoWindow>
-                                <p>Hello</p>
-                            </InfoWindow>)}
-                        </Marker>
-                    ))
+                    .map((marker, idx) => {
+                        const venueInfo = props.venues.find(venue => venue.id === marker.id)
+                        return (
+                            <Marker key={idx} position={{ lat: marker.lat, lng: marker.lng }} onClick={() => props.handleMarkerClick(marker)}>
+                                {marker.isOpen && venueInfo.location.formattedAddress && (
+                                    <InfoWindow>
+                                            <div>
+                                                <h3>{venueInfo.name}</h3>
+                                                <p>{venueInfo.location.formattedAddress}</p>
+                                        </div>
+                                    </InfoWindow>)}
+                            </Marker>
+                        )
+                    }
+                    )
             }
         </GoogleMap>
     ))

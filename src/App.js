@@ -26,12 +26,18 @@ class App extends Component {
     this.closeMarkers()
     marker.isOpen = true
     this.setState({ markers: Object.assign(this.state.markers, marker) })
+    const venue = this.state.venues.find(venue => venue.id === marker.id)
+    SquareAPI.getVenueDetails(marker.id)
+      .then(res => {
+        const currentVenue = Object.assign(venue, res.response.venue)
+        this.setState({ venues: Object.assign(this.state.venues, currentVenue) })
+      })
   }
 
   componentDidMount() {
     SquareAPI.search({
       ll: "33.42,-111.83",
-      query: 'restaurant'
+      query: 'coffee'
     }).then(results => {
       const { venues } = results.response;
       const markers = venues.map(venue => {
@@ -39,7 +45,8 @@ class App extends Component {
           lat: venue.location.lat,
           lng: venue.location.lng,
           isOpen: false,
-          isVisible: true
+          isVisible: true,
+          id: venue.id
         }
       })
       this.setState({ venues, markers })
@@ -61,5 +68,5 @@ export default App;
 
 /*tutorial from here: https://www.youtube.com/watch?v=ywdxLNjhBYw&list=PLgOB68PvvmWCGNn8UMTpcfQEiITzxEEA1
 and from here: https://www.youtube.com/watch?v=Q0vzqlnWWZw&list=PL4rQq4MQP1crXuPtruu_eijgOUUXhcUCP&index=2
-with help from here https://github.com/tomchentw/react-google-maps/issues/175
+with help from here https://github.com/tomchentw/react-google-maps/issues/175 and here https://codeshare.co.uk/blog/how-to-style-the-google-maps-popup-infowindow/
 */
