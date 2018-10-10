@@ -1,26 +1,41 @@
 import React, { Component } from 'react'
-import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
+import { withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow } from "react-google-maps"
+
+const mapStyle = require('./mapStyle.json')
 
 const MyMapComponent = withScriptjs(
     withGoogleMap((props) =>
-  <GoogleMap
-    defaultZoom={14}
-    defaultCenter={{ lat: 33.42, lng: -111.83}}
-  >
-    {props.markers &&
-        props.markers
-        .filter(marker => marker.isVisible)
-        .map((marker, idx) => (
-            <Marker key={idx} position = {{ lat: marker.lat, lng: marker.lng }} />
-        ))
-     }
-  </GoogleMap>
-))
+        <GoogleMap
+            defaultZoom={14}
+            defaultCenter={{ lat: 33.42, lng: -111.83 }}
+            defaultOptions = {{ styles: mapStyle,
+                streetViewControl: false,
+                scaleControl: false,
+                mapTypeControl: false,
+                panControl: false,
+                zoomControl: false,
+                rotateControl: false,
+                fullscreenControl: false }}
+            disableDefaultUI
+        >
+            {props.markers &&
+                props.markers
+                    .filter(marker => marker.isVisible)
+                    .map((marker, idx) => (
+                        <Marker key={idx} position={{ lat: marker.lat, lng: marker.lng }} onClick ={()=> props.handleMarkerClick(marker)}>
+                            {marker.isOpen && (<InfoWindow>
+                                <p>Hello</p>
+                            </InfoWindow>)}
+                        </Marker>
+                    ))
+            }
+        </GoogleMap>
+    ))
 
 
-export default class Map extends Component{
+export default class Map extends Component {
     render() {
-        return(
+        return (
             <MyMapComponent
                 {...this.props}
                 googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnPeVOPbLkPtwjEbH9MKDppTkoFSVmKdA"

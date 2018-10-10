@@ -1,0 +1,17 @@
+[
+    {
+        "featureType": "all",
+        "elementType": "all",
+        "stylers": [
+            {
+                "hue": "#0000b0"
+            },
+            {
+                "invert_lightness": "true"
+            },
+            {
+                "saturation": -30
+            }
+        ]
+    }
+]
