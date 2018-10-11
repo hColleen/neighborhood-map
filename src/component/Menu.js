@@ -40,7 +40,7 @@ class BurgerMenu extends Component {
             <Menu noOverlay right>
                 <div className="sidebar">
                     <b>Find Your Fancy</b>
-                    <input type={"search"} id={"search"} placeholder={"Filter"} onChange = {this.handleChange} />
+                    <input type={"search"} id={"search"} aria-label={"Filter Venues"} placeholder={"Filter"} onChange = {this.handleChange} />
                     <VenueList {...this.props} venues = {this.handleFilterVenues()} handleListItemClick={this.props.handleListItemClick} />
                 </div>
             </Menu>

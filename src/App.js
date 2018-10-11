@@ -33,7 +33,7 @@ class App extends Component {
     SquareAPI.getVenueDetails(marker.id)
       .then(res => {
         const currentVenue = Object.assign(venue, res.response.venue)
-        this.setState({ venues: Object.assign(this.state.venues, currentVenue) })
+        this.setState({ venues: Object.assign(this.state.venues, currentVenue)})
       })
   }
 
@@ -48,7 +48,8 @@ class App extends Component {
       ll: "33.42,-111.83",
       query: 'coffee'
     }).then(results => {
-      const { venues } = results.response;
+      const { venues } = results.response
+      const { center } = `lat: 33.42, lng: -111.83`
       const markers = venues.map(venue => {
         return {
           lat: venue.location.lat,
