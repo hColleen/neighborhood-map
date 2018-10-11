@@ -10,7 +10,7 @@ class BurgerMenu extends Component {
                 <div className="sidebar">
                     <b>Find Your Fancy</b>
                     <input type={"search"} id={"search"} placeholder={"Filter"} />
-                    <VenueList />
+                    <VenueList {...this.props} handleListItemClick={this.props.handleListItemClick} />
                 </div>
             </Menu>
         )

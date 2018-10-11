@@ -2,7 +2,6 @@
   text-align: center;
   height: 100vh;
 }
-
   #map {
   height: 100vh;
 }
@@ -13,6 +12,9 @@ html, body {
   padding: 0;
 }
 
+
+/*infoWindow styling*/
+/*style the box*/ 
 .gm-style .gm-style-iw {
   background-color: #3333cc!important;
   color: white;
@@ -20,11 +22,31 @@ html, body {
   left: 0 !important;
   width: 100% !important;
   height: 100% !important;
+  min-height: 250px;
   padding-top: 10px;
   display: block !important;
+  padding-left: 10px;
 }    
 
-/*style the p tag*/
-.gm-style .gm-style-iw #google-popup p{
-  padding: 10px;
+  /*style the p tag*/
+  .gm-style .gm-style-iw #google-popup p{
+    padding: 10px;
+  }
+  
+
+/*style the arrow*/
+.gm-style div div div div div div div div {
+    background-color: #3333cc !important;
+    padding: 0;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    color: #fff;
+    font-size: 16px;
+}
+
+/*style the link*/
+.gm-style div div div div div div div div a {
+    color: #f1f1f1;
+    font-weight: bold;
 }

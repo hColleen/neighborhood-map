@@ -6,7 +6,7 @@ const mapStyle = require('./mapStyle.json')
 const MyMapComponent = withScriptjs(
     withGoogleMap((props) =>
         <GoogleMap
-            defaultZoom={16}
+            defaultZoom={13}
             defaultCenter={{ lat: 33.42, lng: -111.83 }}
             defaultOptions={{
                 styles: mapStyle,
@@ -27,9 +27,10 @@ const MyMapComponent = withScriptjs(
                         const venueInfo = props.venues.find(venue => venue.id === marker.id)
                         return (
                             <Marker key={idx} position={{ lat: marker.lat, lng: marker.lng }} onClick={() => props.handleMarkerClick(marker)}>
-                                {marker.isOpen && venueInfo.location.formattedAddress && (
+                                {marker.isOpen && venueInfo.bestPhoto && venueInfo.location.formattedAddress && (
                                     <InfoWindow>
                                             <div>
+                                                <img src ={`${venueInfo.bestPhoto.prefix}200x200${venueInfo.bestPhoto.suffix}`} alt = {"Venue"} />
                                                 <h3>{venueInfo.name}</h3>
                                                 <p>{venueInfo.location.formattedAddress}</p>
                                         </div>

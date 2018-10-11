@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import './App.css';
 import Map from './component/Map'
-import SquareAPI from './API/';
-
+import SquareAPI from './API/'
+import BurgerMenu from './component/Menu'
 
 class App extends Component {
 
@@ -34,6 +34,12 @@ class App extends Component {
       })
   }
 
+  handleListItemClick = venue => {
+    const marker = this.state.markers.find(marker => marker.id === venue.id)
+    this.handleMarkerClick(marker)
+    console.log(venue)
+  }
+
   componentDidMount() {
     SquareAPI.search({
       ll: "33.42,-111.83",
@@ -59,7 +65,10 @@ class App extends Component {
 
   render() {
     return (
-      <Map {...this.state} handleMarkerClick={this.handleMarkerClick} />
+      <div className="app">
+        <BurgerMenu {...this.state} handleListItemClick={this.handleListItemClick}  noOverlay />
+        <Map {...this.state} handleMarkerClick={this.handleMarkerClick} />
+      </div>
     );
   }
 }
@@ -69,4 +78,5 @@ export default App;
 /*tutorial from here: https://www.youtube.com/watch?v=ywdxLNjhBYw&list=PLgOB68PvvmWCGNn8UMTpcfQEiITzxEEA1
 and from here: https://www.youtube.com/watch?v=Q0vzqlnWWZw&list=PL4rQq4MQP1crXuPtruu_eijgOUUXhcUCP&index=2
 with help from here https://github.com/tomchentw/react-google-maps/issues/175 and here https://codeshare.co.uk/blog/how-to-style-the-google-maps-popup-infowindow/
+map styling from here https://snazzymaps.com/style/11/blue
 */
