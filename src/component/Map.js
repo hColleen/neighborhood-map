@@ -1,3 +1,4 @@
+/*global google */
 import React, { Component } from 'react'
 import { withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow } from "react-google-maps"
 
@@ -23,16 +24,21 @@ const MyMapComponent = withScriptjs(
             {props.markers &&
                 props.markers
                     .filter(marker => marker.isVisible)
-                    .map((marker, idx) => {
+                    .map((marker, idx, arr) => {
                         const venueInfo = props.venues.find(venue => venue.id === marker.id)
                         return (
-                            <Marker key={idx} position={{ lat: marker.lat, lng: marker.lng }} onClick={() => props.handleMarkerClick(marker)}>
+                            <Marker
+                                key={idx}
+                                position={{ lat: marker.lat, lng: marker.lng }}
+                                onClick={() => props.handleMarkerClick(marker)}
+                                animation = {arr.length ===1 ? google.maps.Animation.BOUNCE : google.maps.Animation.DROP}
+                            >
                                 {marker.isOpen && venueInfo.bestPhoto && venueInfo.location.formattedAddress && (
                                     <InfoWindow>
-                                            <div>
-                                                <img src ={`${venueInfo.bestPhoto.prefix}200x200${venueInfo.bestPhoto.suffix}`} alt = {"Venue"} />
-                                                <h3>{venueInfo.name}</h3>
-                                                <p>{venueInfo.location.formattedAddress}</p>
+                                        <div>
+                                            <img src={`${venueInfo.bestPhoto.prefix}200x200${venueInfo.bestPhoto.suffix}`} alt={"Venue"} />
+                                            <h3>{venueInfo.name}</h3>
+                                            <p>{venueInfo.location.formattedAddress}</p>
                                         </div>
                                     </InfoWindow>)}
                             </Marker>

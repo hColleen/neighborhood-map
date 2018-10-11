@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { slide as Menu } from 'react-burger-menu';
+import { stack as Menu } from 'react-burger-menu';
 import './Menu.css'
 import VenueList from './VenueList'
 
@@ -15,7 +15,7 @@ class BurgerMenu extends Component {
 
     handleFilterVenues = () =>{
         if (this.state.query.trim() !== ''){
-            const venues = this.props.venues.filter(venue => venue.name.toLowerCase.includes(this.state.query.toLowerCase()))
+            const venues = this.props.venues.filter(venue => venue.name.toLowerCase().includes(this.state.query.toLowerCase()))
             return venues
         } else {
             return this.props.venues
@@ -23,9 +23,9 @@ class BurgerMenu extends Component {
     }
     handleChange =e =>{
         this.setState({ query: e.target.value })
-        const markers = this.props.venues.filter(venue => {
+        const markers = this.props.venues.map(venue => {
             const isMatched = venue.name.toLowerCase().includes(e.target.value.toLowerCase())
-            const marker = this.props.markers.find(marker.id === venue.id)
+            const marker = this.props.markers.find(marker => marker.id === venue.id)
             if (isMatched){
                 marker.isVisible = true;
             } else {
@@ -37,7 +37,7 @@ class BurgerMenu extends Component {
     }
     render() {
         return (
-            <Menu>
+            <Menu noOverlay right>
                 <div className="sidebar">
                     <b>Find Your Fancy</b>
                     <input type={"search"} id={"search"} placeholder={"Filter"} onChange = {this.handleChange} />

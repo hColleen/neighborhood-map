@@ -3,7 +3,7 @@
     position: absolute;
     width: 36px;
     height: 30px;
-    left: 36px;
+    right: 36px;
     top: 24px;
   }
   
@@ -27,8 +27,6 @@
   /* General sidebar styles */
   .bm-menu {
     background: #3333cc;
-    color: white;
-    padding: 1.5em 1.5em 0;
     font-size: 1.15em;
   }
   
@@ -39,7 +37,7 @@
   
   /* Wrapper for item list */
   .bm-item-list {
-    color: #b8b7ad;
+    color: white;
     padding: 0.8em;
   }
   
@@ -54,8 +52,12 @@
   }
   /* Menu link colors */
   a {
-      color: #660000;
+      color: #3333cc;
   }
+
+  ol.venueList {
+    padding: 0px;
+}
 
 #search{
   width: 100%;
@@ -66,4 +68,6 @@
   list-style: none;
   box-shadow: 1px 1px 1px rgba(0,0,0,0.5);
   margin-top: 10px;
+  display: flex;
+  align-items: center;
 }

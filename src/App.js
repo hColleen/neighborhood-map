@@ -69,7 +69,7 @@ class App extends Component {
   render() {
     return (
       <div className="app">
-        <BurgerMenu {...this.state} handleListItemClick={this.handleListItemClick}  noOverlay />
+        <BurgerMenu {...this.state} handleListItemClick={this.handleListItemClick} />
         <Map {...this.state} handleMarkerClick={this.handleMarkerClick} />
       </div>
     );
