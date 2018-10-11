@@ -10,6 +10,7 @@ Created for Udacity Front-End Nano-Degree program
 3. Run `npm install`
 4. Run `npm start`
 5. Project should open in browser at `http://localhost:3000/`
+6. Live demo [here](https://hcolleen.github.io/neighborhood-map/)
 
 ## Dependancies
 1. GoogleMaps API
