@@ -27,6 +27,7 @@
   /* General sidebar styles */
   .bm-menu {
     background: #3333cc;
+    color: white;
     padding: 1.5em 1.5em 0;
     font-size: 1.15em;
   }
@@ -49,7 +50,7 @@
   
   /* Styling of overlay */
   .bm-overlay {
-    background: rgba(102, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.3);
   }
   /* Menu link colors */
   a {

@@ -10,7 +10,10 @@ class App extends Component {
     super();
     this.state = {
       venues: [],
-      markers: []
+      markers: [],
+      updateSuperState: obj =>{
+        this.setState(obj)
+      }
     }
   }
 
