@@ -1,100 +1,85 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import './App.css';
-import axios from 'axios';
-import BurgerMenu from './component/Menu';
-
+import Map from './component/Map'
+import SquareAPI from './API/'
+import BurgerMenu from './component/Menu'
 
 class App extends Component {
 
-  state = {
-    venues: [],
-    venueID: []
-  }
-
-  componentDidMount(){
-    this.getVenues()
-  }
-
-  renderMap = () =>{
-    loadMapAPI("https://maps.googleapis.com/maps/api/js?key=AIzaSyCnPeVOPbLkPtwjEbH9MKDppTkoFSVmKdA&callback=initMap")
-    window.initMap = this.initMap
-  }
-
-  getVenues = () => {
-    const endPoint = "https://api.foursquare.com/v2/venues/explore?"
-    const parameters = {
-      client_id: "JKLNY4U2KT3FAS2L2AHI50NEEO0BHAY0A004ALOQEEBS5AIW",
-      client_secret: "A5ZD1JNOSWUQ0MKYLOV0B1F03YK1PW2CLWPDL45VYPPSQA2W",
-      query: "food",
-      ll: "33.42,-111.83",
-      v: "20182507"
+  constructor() {
+    super();
+    this.state = {
+      venues: [],
+      markers: [],
+      updateSuperState: obj =>{
+        this.setState(obj)
+      }
     }
-    axios.get(endPoint + new URLSearchParams(parameters))
-    .then(response => {
-        this.setState({
-        venues: response.data.response.groups[0].items
-        })
-      this.renderMap()
-      })
-    .catch(error =>{
-      console.log("Error" + error)
-    })
   }
 
-initMap = () => {
-  const styles = [{"featureType": "all", "elementType": "all", "stylers": [{"hue": "#0000b0"},{"invert_lightness": "true"},{"saturation": -30}]}]
-  const map = new window.google.maps.Map(document.getElementById('map'), {
-    center: {lat: 33.415076, lng: -111.831389},
-    zoom: 16,
-    styles: styles,
-    mapTypeId: "roadmap",
-    disableDefaultUI: true
-  })
-
-  let infoWindow = new window.google.maps.InfoWindow()
-
-  this.state.venues.map(myVenue =>{
-
-    let marker = new window.google.maps.Marker({
-      position: {lat: myVenue.venue.location.lat, lng: myVenue.venue.location.lng},
-      map: map,
-      title: myVenue.venue.name,
-      animation: window.google.maps.Animation.DROP
+  closeMarkers = () => {
+    const markers = this.state.markers.map(marker => {
+      marker.isOpen = false
+      return marker
     })
+    this.setState({ markers: Object.assign(this.state.markers, markers) })
+  }
 
-    let contentString = `${myVenue.venue.name}<br />
-    ${myVenue.venue.location.address}`
+  handleMarkerClick = (marker) => {
+    this.closeMarkers()
+    marker.isOpen = true
+    this.setState({ markers: Object.assign(this.state.markers, marker) })
+    const venue = this.state.venues.find(venue => venue.id === marker.id)
+    SquareAPI.getVenueDetails(marker.id)
+      .then(res => {
+        const currentVenue = Object.assign(venue, res.response.venue)
+        this.setState({ venues: Object.assign(this.state.venues, currentVenue) })
+      })
+  }
 
+  handleListItemClick = venue => {
+    const marker = this.state.markers.find(marker => marker.id === venue.id)
+    this.handleMarkerClick(marker)
+    console.log(venue)
+  }
 
-    marker.addListener('click', function(){
-      infoWindow.setContent(contentString)
-      infoWindow.open(map, marker)
+  componentDidMount() {
+    SquareAPI.search({
+      ll: "33.42,-111.83",
+      query: 'coffee'
+    }).then(results => {
+      const { venues } = results.response;
+      const markers = venues.map(venue => {
+        return {
+          lat: venue.location.lat,
+          lng: venue.location.lng,
+          isOpen: false,
+          isVisible: true,
+          id: venue.id
+        }
+      })
+      this.setState({ venues, markers })
+      console.log(results)
+    }).catch(error => {
+      alert('FourSquare API Failed. Please check connection and try again')
+      console.log(error);
     })
-
-  })
-}
-
+  }
 
   render() {
     return (
-        <main>
-          <BurgerMenu />
-          <div id = "map" role = "application" aria-label = "map" tabIndex = "-1"></div>
-        </main>
-    );  
+      <div className="app">
+        <BurgerMenu {...this.state} handleListItemClick={this.handleListItemClick}  noOverlay />
+        <Map {...this.state} handleMarkerClick={this.handleMarkerClick} />
+      </div>
+    );
   }
-}
-
-
-function loadMapAPI(url){
-  let index = window.document.getElementsByTagName('script')[0]
-  let script = window.document.createElement('script')
-  script.src = url
-  script.asynch = true
-  script.defer = true
-  index.parentNode.insertBefore(script, index)
 }
 
 export default App;
 
-//tutorial from here: https://www.youtube.com/watch?v=ywdxLNjhBYw&list=PLgOB68PvvmWCGNn8UMTpcfQEiITzxEEA1
+/*tutorial from here: https://www.youtube.com/watch?v=ywdxLNjhBYw&list=PLgOB68PvvmWCGNn8UMTpcfQEiITzxEEA1
+and from here: https://www.youtube.com/watch?v=Q0vzqlnWWZw&list=PL4rQq4MQP1crXuPtruu_eijgOUUXhcUCP&index=2
+with help from here https://github.com/tomchentw/react-google-maps/issues/175 and here https://codeshare.co.uk/blog/how-to-style-the-google-maps-popup-infowindow/
+map styling from here https://snazzymaps.com/style/11/blue
+*/
