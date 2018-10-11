@@ -9,7 +9,7 @@ Created for Udacity Front-End Nano-Degree program
 2. Using Terminal, navigate to the folder
 3. Run `npm install`
 4. Run `npm start`
-5. Project should open in browser
+5. Project should open in browser at `http://localhost:3000/`
 
 ## Dependancies
 1. GoogleMaps API
