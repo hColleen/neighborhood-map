@@ -1,7 +1,6 @@
 /*global google */
 import React, { Component } from 'react'
 import { withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow } from "react-google-maps"
-import star from './images/star.svg.png'
 
 const mapStyle = require('./mapStyle.json')
 
@@ -27,7 +26,6 @@ const MyMapComponent = withScriptjs(
                     .filter(marker => marker.isVisible)
                     .map((marker, idx, arr) => {
                         const venueInfo = props.venues.find(venue => venue.id === marker.id)
-                        const markerIcon = `http://maps.google.com/mapfiles/ms/icons/red-dot.png`
                         let picture = ""
                         if (venueInfo.bestPhoto){
                             picture = `${venueInfo.bestPhoto.prefix}200x200${venueInfo.bestPhoto.suffix}`
@@ -39,11 +37,11 @@ const MyMapComponent = withScriptjs(
                                 key={idx}
                                 position={{ lat: marker.lat, lng: marker.lng }}
                                 onClick={() => props.handleMarkerClick(marker)}
-                                animation = {arr.length ===1 ? google.maps.Animation.BOUNCE : google.maps.Animation.DROP}
-                                icon = {marker.isOpen === true ? star : markerIcon}
+                                animation = {arr.length === 1 ? google.maps.Animation.BOUNCE : google.maps.Animation.DROP}
+                                icon = {marker.icon}
                             >
                                 {marker.isOpen && venueInfo.location.formattedAddress && (
-                                    <InfoWindow onCloseClick={marker.isOpen = false}>
+                                    <InfoWindow>
                                         <div>
                                             <img src={picture} alt={"Venue"} />
                                             <h3>{venueInfo.name}</h3>

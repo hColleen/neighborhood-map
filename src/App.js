@@ -3,6 +3,8 @@ import './App.css';
 import Map from './component/Map'
 import SquareAPI from './API/'
 import BurgerMenu from './component/Menu'
+import star from './component/images/star.svg.png'
+
 
 class App extends Component {
 
@@ -20,6 +22,7 @@ class App extends Component {
   closeMarkers = () => {
     const markers = this.state.markers.map(marker => {
       marker.isOpen = false
+      marker.icon = `http://maps.google.com/mapfiles/ms/icons/red-dot.png`
       return marker
     })
     this.setState({ markers: Object.assign(this.state.markers, markers) })
@@ -28,6 +31,7 @@ class App extends Component {
   handleMarkerClick = (marker) => {
     this.closeMarkers()
     marker.isOpen = true
+    marker.icon = star
     this.setState({ markers: Object.assign(this.state.markers, marker) })
     const venue = this.state.venues.find(venue => venue.id === marker.id)
     SquareAPI.getVenueDetails(marker.id)
@@ -49,14 +53,14 @@ class App extends Component {
       query: 'coffee'
     }).then(results => {
       const { venues } = results.response
-      const { center } = `lat: 33.42, lng: -111.83`
       const markers = venues.map(venue => {
         return {
           lat: venue.location.lat,
           lng: venue.location.lng,
           isOpen: false,
           isVisible: true,
-          id: venue.id
+          id: venue.id,
+          icon: `http://maps.google.com/mapfiles/ms/icons/red-dot.png`
         }
       })
       this.setState({ venues, markers })
@@ -68,7 +72,7 @@ class App extends Component {
   }
 
   render() {
-    return (
+      return(
       <div className="app">
         <BurgerMenu {...this.state} handleListItemClick={this.handleListItemClick} />
         <Map {...this.state} handleMarkerClick={this.handleMarkerClick} />
