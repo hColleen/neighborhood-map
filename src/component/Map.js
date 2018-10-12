@@ -1,6 +1,7 @@
 /*global google */
 import React, { Component } from 'react'
 import { withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow } from "react-google-maps"
+import star from './images/star.svg.png'
 
 const mapStyle = require('./mapStyle.json')
 
@@ -26,17 +27,24 @@ const MyMapComponent = withScriptjs(
                     .filter(marker => marker.isVisible)
                     .map((marker, idx, arr) => {
                         const venueInfo = props.venues.find(venue => venue.id === marker.id)
+                        let picture = ""
+                        if (venueInfo.bestPhoto){
+                            picture = `${venueInfo.bestPhoto.prefix}200x200${venueInfo.bestPhoto.suffix}`
+                        } else {
+                            picture = `${venueInfo.categories[0].icon.prefix}32${venueInfo.categories[0].icon.suffix}`
+                        }
                         return (
                             <Marker
                                 key={idx}
                                 position={{ lat: marker.lat, lng: marker.lng }}
                                 onClick={() => props.handleMarkerClick(marker)}
                                 animation = {arr.length ===1 ? google.maps.Animation.BOUNCE : google.maps.Animation.DROP}
+                                icon = {marker.isOpen === true ? star : marker}
                             >
-                                {marker.isOpen && venueInfo.bestPhoto && venueInfo.location.formattedAddress && (
+                                {marker.isOpen && venueInfo.location.formattedAddress && (
                                     <InfoWindow>
                                         <div>
-                                            <img src={`${venueInfo.bestPhoto.prefix}200x200${venueInfo.bestPhoto.suffix}`} alt={"Venue"} />
+                                            <img src={picture} alt={"Venue"} />
                                             <h3>{venueInfo.name}</h3>
                                             <p>{venueInfo.location.formattedAddress}</p>
                                         </div>
