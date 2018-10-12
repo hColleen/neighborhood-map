@@ -27,6 +27,7 @@ const MyMapComponent = withScriptjs(
                     .filter(marker => marker.isVisible)
                     .map((marker, idx, arr) => {
                         const venueInfo = props.venues.find(venue => venue.id === marker.id)
+                        const markerIcon = `http://maps.google.com/mapfiles/ms/icons/red-dot.png`
                         let picture = ""
                         if (venueInfo.bestPhoto){
                             picture = `${venueInfo.bestPhoto.prefix}200x200${venueInfo.bestPhoto.suffix}`
@@ -39,10 +40,10 @@ const MyMapComponent = withScriptjs(
                                 position={{ lat: marker.lat, lng: marker.lng }}
                                 onClick={() => props.handleMarkerClick(marker)}
                                 animation = {arr.length ===1 ? google.maps.Animation.BOUNCE : google.maps.Animation.DROP}
-                                icon = {marker.isOpen === true ? star : marker}
+                                icon = {marker.isOpen === true ? star : markerIcon}
                             >
                                 {marker.isOpen && venueInfo.location.formattedAddress && (
-                                    <InfoWindow>
+                                    <InfoWindow onCloseClick={marker.isOpen = false}>
                                         <div>
                                             <img src={picture} alt={"Venue"} />
                                             <h3>{venueInfo.name}</h3>
