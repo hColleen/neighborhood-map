@@ -4,7 +4,7 @@ import Map from './component/Map'
 import SquareAPI from './API/'
 import BurgerMenu from './component/Menu'
 import star from './component/images/star.svg.png'
-
+import ErrorBoundary from './component/ErrorBoundary'
 
 class App extends Component {
 
@@ -20,6 +20,7 @@ class App extends Component {
   }
 
   closeMarkers = () => {
+    //returns markers to default state
     const markers = this.state.markers.map(marker => {
       marker.isOpen = false
       marker.icon = `http://maps.google.com/mapfiles/ms/icons/red-dot.png`
@@ -29,6 +30,7 @@ class App extends Component {
   }
 
   handleMarkerClick = (marker) => {
+    //opens info window and changes marker icon when clicked on after returning any other markers to default state
     this.closeMarkers()
     marker.isOpen = true
     marker.icon = star
@@ -42,12 +44,14 @@ class App extends Component {
   }
 
   handleListItemClick = venue => {
+    //allows user to click on list item and open marker/info window
     const marker = this.state.markers.find(marker => marker.id === venue.id)
     this.handleMarkerClick(marker)
     console.log(venue)
   }
 
   componentDidMount() {
+    //pulls information from foursquare
     SquareAPI.search({
       ll: "33.42,-111.83",
       query: 'coffee'
@@ -74,8 +78,10 @@ class App extends Component {
   render() {
       return(
       <div className="app">
-        <BurgerMenu {...this.state} handleListItemClick={this.handleListItemClick} />
-        <Map {...this.state} handleMarkerClick={this.handleMarkerClick} />
+        <ErrorBoundary>
+          <BurgerMenu {...this.state} handleListItemClick={this.handleListItemClick} />
+          <Map {...this.state} handleMarkerClick={this.handleMarkerClick} closeMarkers={this.closeMarkers} onCloseClick={this.closeMarkers} />
+        </ErrorBoundary>
       </div>
     );
   }

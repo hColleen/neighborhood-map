@@ -2,8 +2,11 @@
 import React, { Component } from 'react'
 import { withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow } from "react-google-maps"
 
+window.gm_authFailure = ()=>{alert("Please check your Google API key")} 
+
 const mapStyle = require('./mapStyle.json')
 
+//sets up default map view, hiding default UI for aesthetic reasons, also connects marker generation to marker functions in App
 const MyMapComponent = withScriptjs(
     withGoogleMap((props) =>
         <GoogleMap
@@ -41,11 +44,12 @@ const MyMapComponent = withScriptjs(
                                 icon = {marker.icon}
                             >
                                 {marker.isOpen && venueInfo.location.formattedAddress && (
-                                    <InfoWindow>
+                                    <InfoWindow onCloseClick={() => props.closeMarkers()} >
                                         <div>
-                                            <img src={picture} alt={"Venue"} />
+                                            <img src={picture} alt={venueInfo.categories[0].name} />
                                             <h3>{venueInfo.name}</h3>
                                             <p>{venueInfo.location.formattedAddress}</p>
+                                            <p className= "attrib">Info from FourSquare</p>
                                         </div>
                                     </InfoWindow>)}
                             </Marker>

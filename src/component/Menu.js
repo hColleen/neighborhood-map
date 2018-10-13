@@ -14,6 +14,7 @@ class BurgerMenu extends Component {
     }
 
     handleFilterVenues = () =>{
+        //filter list based on user input
         if (this.state.query.trim() !== ''){
             const venues = this.props.venues.filter(venue => venue.name.toLowerCase().includes(this.state.query.toLowerCase()))
             return venues
@@ -22,6 +23,7 @@ class BurgerMenu extends Component {
         }
     }
     handleChange =e =>{
+        //hide markers based on user input
         this.setState({ query: e.target.value })
         const markers = this.props.venues.map(venue => {
             const isMatched = venue.name.toLowerCase().includes(e.target.value.toLowerCase())
@@ -39,7 +41,7 @@ class BurgerMenu extends Component {
         return (
             <Menu noOverlay right>
                 <div className="sidebar">
-                    <b>Find Your Fancy</b>
+                    <header><b>Find Your Fancy</b></header>
                     <input type={"search"} id={"search"} aria-label={"Filter Venues"} placeholder={"Filter"} onChange = {this.handleChange} />
                     <VenueList {...this.props} venues = {this.handleFilterVenues()} handleListItemClick={this.props.handleListItemClick} />
                 </div>
